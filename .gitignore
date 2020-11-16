@@ -25,6 +25,7 @@
 hs_err_pid*
 
 .idea/
-.out/
+out/
+out/META-INF/
 *.iml
 *.txt
