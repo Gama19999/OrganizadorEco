@@ -13,6 +13,7 @@ public class TaskPanel extends JPanel implements ActionListener {
         this.setBackground(GUI.colorPrincipal);
         this.setOpaque(false);
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        this.setPreferredSize(new Dimension(350, 480));
         addOne = new JButton();
         addOne.setIcon(new ImageIcon("imagenes/plus.png"));
         addOne.setBackground(null);

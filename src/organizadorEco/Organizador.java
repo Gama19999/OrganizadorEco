@@ -141,4 +141,13 @@ public abstract class Organizador {
             }
         }
     }
+
+    public static void reestablecer() {
+        for (ArrayList arrayList : arrayLists) {
+            arrayList.clear();
+        }
+        for (File archivo : listas) {
+            archivo.delete();
+        }
+    }
 }

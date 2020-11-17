@@ -2,24 +2,28 @@ package organizadorEco;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.*;
 
-class ConfigPanel extends JPanel implements ItemListener {
-    final int WIDTH = 320;
-    final int HEIGHT = 300;
+class ConfigPanel extends JPanel implements ItemListener, ActionListener {
+    final int WIDTH = 300;
+    final int HEIGHT = 250;
     final static File config = new File("config.txt");
     static String fuenteStr;
     static String tituloStr;
     static String tema;
     JPanel custom;
+    JPanel otros;
     JLabel cambiarFuente;
     JLabel cambiarTema;
     JLabel cambiarTitulo;
     JTextField fuenteActual;
     JTextField tituloActual;
     JComboBox<String> temasCombo;
+    JButton reestablecer;
     String[] temas = {"Naturaleza", "Acuario", "Oscuro"};
 
     ConfigPanel() {
@@ -28,9 +32,14 @@ class ConfigPanel extends JPanel implements ItemListener {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         custom = new JPanel();
-        custom.setBackground(GUI.colorSecundario);
+        custom.setBackground(GUI.colorTerciario);
         custom.setPreferredSize(new Dimension(WIDTH - 20, HEIGHT));
         custom.setLayout(new FlowLayout(FlowLayout.CENTER, 150, 10));
+
+        otros = new JPanel();
+        otros.setBackground(GUI.colorTerciario);
+        otros.setPreferredSize(new Dimension(WIDTH - 20, HEIGHT - 200));
+        otros.setLayout(new FlowLayout(FlowLayout.CENTER, 150, 10));
 
         cambiarFuente = new JLabel("Fuente");
         cambiarFuente.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
@@ -51,7 +60,7 @@ class ConfigPanel extends JPanel implements ItemListener {
 
         fuenteActual = new JTextField(GUI.fuente);
         fuenteActual.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
-        fuenteActual.setBackground(GUI.colorSecundario);
+        fuenteActual.setBackground(Color.white);
         fuenteActual.addActionListener(e -> {
             fuenteStr = fuenteActual.getText();
             fuenteActual.setBackground(GUI.colorTerciario);
@@ -59,7 +68,7 @@ class ConfigPanel extends JPanel implements ItemListener {
 
         tituloActual = new JTextField(GUI.tituloStr);
         tituloActual.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
-        tituloActual.setBackground(GUI.colorSecundario);
+        tituloActual.setBackground(Color.white);
         tituloActual.addActionListener(e -> {
             tituloStr = tituloActual.getText();
             tituloActual.setBackground(GUI.colorTerciario);
@@ -67,8 +76,14 @@ class ConfigPanel extends JPanel implements ItemListener {
 
         temasCombo = new JComboBox<>(temas);
         temasCombo.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
-        temasCombo.setBackground(GUI.colorSecundario);
+        temasCombo.setBackground(GUI.colorTerciario);
         temasCombo.addItemListener(this);
+
+        reestablecer = new JButton("Reestablecer");
+        reestablecer.setBackground(GUI.colorTerciario);
+        reestablecer.setForeground(Color.black);
+        reestablecer.addActionListener(this);
+        reestablecer.setFont(new Font(GUI.fuente, Font.BOLD, 14));
 
         custom.add(cambiarFuente);
         custom.add(fuenteActual);
@@ -76,7 +91,9 @@ class ConfigPanel extends JPanel implements ItemListener {
         custom.add(tituloActual);
         custom.add(cambiarTema);
         custom.add(temasCombo);
+        otros.add(reestablecer);
         this.add(custom);
+        this.add(otros);
     }
 
     public static void aplicarConfiguracion() {
@@ -127,6 +144,14 @@ class ConfigPanel extends JPanel implements ItemListener {
     public void itemStateChanged(ItemEvent e) {
         if (e.getSource() == temasCombo) {
             tema = (String)temasCombo.getSelectedItem();
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == reestablecer) {
+            config.delete();
+            Organizador.reestablecer();
         }
     }
 }

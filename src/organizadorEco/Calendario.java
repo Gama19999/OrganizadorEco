@@ -34,6 +34,7 @@ public class Calendario extends JPanel implements ActionListener {
     Calendario() {
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         this.setBackground(GUI.colorPrincipal);
+        // this.setPreferredSize(new Dimension(300, 300));
 
         panelMes = new JPanel();
         panelMes.setLayout(new GridLayout(0, 7, 5, 5));

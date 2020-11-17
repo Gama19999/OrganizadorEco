@@ -41,11 +41,11 @@ public class GUI implements WindowListener {
         frame.setLayout(new BorderLayout(0, 0));
         frame.setLocationRelativeTo(null);
         frame.addWindowListener(this);
+        frame.setIconImage(new ImageIcon("imagenes/checkbox.png").getImage());
 
         //Panel Principal
         principal = new JPanel();
         principal.setBackground(colorPrincipal);
-        principal.setPreferredSize(new Dimension(300, 100));
         CardLayout pantallas = new CardLayout();
         principal.setLayout(pantallas);
 
