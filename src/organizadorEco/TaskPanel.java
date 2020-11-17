@@ -28,8 +28,8 @@ public class TaskPanel extends JPanel implements ActionListener {
         escritura.setPreferredSize(new Dimension(300, 40));
         escritura.setBackground(GUI.colorTerciario);
         campo = new JTextField();
-        campo.setPreferredSize(new Dimension(280, 30));
-        campo.setFont(new Font(GUI.fuente, Font.PLAIN, 12));
+        campo.setPreferredSize(new Dimension(290, 30));
+        campo.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
         campo.addActionListener(f -> {
             String texto = campo.getText();
             Organizador.agregarPendiente(texto);

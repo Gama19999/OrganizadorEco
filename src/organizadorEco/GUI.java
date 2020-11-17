@@ -18,7 +18,7 @@ public class GUI implements WindowListener {
     JPanel principal;
 
     static String fuente = "Montserrat";
-    String tituloStr = "Just do that.";
+    static String tituloStr = "Just do that.";
 
     static Color colorPrincipal = new Color(0x27AE60);
     static Color colorSecundario = new Color(0x7FEE71);
@@ -139,6 +139,7 @@ public class GUI implements WindowListener {
     @Override
     public void windowClosing(WindowEvent e) {
         Organizador.escribirArchivos();
+        ConfigPanel.guardarConfiguracion();
         frame.dispose();
     }
 

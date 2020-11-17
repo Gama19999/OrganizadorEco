@@ -52,7 +52,7 @@ public class DonePanel extends JPanel {
 
             label = new JLabel(descripcion, SwingConstants.CENTER);
             label.setFont(new Font(GUI.fuente, Font.PLAIN, SIZE));
-            label.setVerticalAlignment(SwingConstants.CENTER);
+            label.setVerticalAlignment(JLabel.CENTER);
             label.setPreferredSize(new Dimension(WIDTH - 15, HEIGHT / 2));
 
             area = new JTextArea();

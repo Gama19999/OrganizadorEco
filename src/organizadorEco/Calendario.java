@@ -54,8 +54,8 @@ public class Calendario extends JPanel implements ActionListener {
         regresar.addActionListener(this);
 
         campo = new JTextField();
-        campo.setPreferredSize(new Dimension(280, 30));
-        campo.setFont(new Font(GUI.fuente, Font.PLAIN, 12));
+        campo.setPreferredSize(new Dimension(290, 30));
+        campo.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
         campo.addActionListener(f -> {
             String texto = campo.getText();
             Organizador.agregarPendiente(texto, y, m, d);

@@ -9,6 +9,7 @@ public class PendientePanel extends JPanel implements MouseListener, ItemListene
     final int HEIGHT = 40;
     final int SIZE = 15;
     int day, month, year;
+    FlowLayout flowLayout;
     JLabel label;
     JTextArea area;
     JButton eliminar;
@@ -19,7 +20,8 @@ public class PendientePanel extends JPanel implements MouseListener, ItemListene
     JComboBox<Integer> years;
 
     public PendientePanel(String descripcion, int a, int m, int d) {
-        this.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10));
+        flowLayout = new FlowLayout(FlowLayout.CENTER, 32, 0);
+        this.setLayout(flowLayout);
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(GUI.colorTerciario);
 
@@ -53,15 +55,17 @@ public class PendientePanel extends JPanel implements MouseListener, ItemListene
 
         label = new JLabel(descripcion, SwingConstants.CENTER);
         label.setFont(new Font(GUI.fuente, Font.PLAIN, SIZE));
-        label.setVerticalAlignment(SwingConstants.CENTER);
-        label.setPreferredSize(new Dimension(WIDTH - 15, HEIGHT / 2));
+        label.setVerticalAlignment(JLabel.CENTER);
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setHorizontalTextPosition(JLabel.CENTER);
+        label.setPreferredSize(new Dimension(WIDTH - 5, HEIGHT));
 
         area = new JTextArea();
         area.setFont(new Font(GUI.fuente, Font.PLAIN, SIZE));
         area.setText(descripcion);
         area.setWrapStyleWord(true);
         area.setLineWrap(true);
-        area.setPreferredSize(new Dimension(280, 95));
+        area.setPreferredSize(new Dimension(WIDTH, 95));
 
         eliminar = new JButton();
         ImageIcon remove = new ImageIcon("imagenes/remove.png");
@@ -93,13 +97,7 @@ public class PendientePanel extends JPanel implements MouseListener, ItemListene
         guardar.setBackground(null);
         guardar.setBorder(null);
         guardar.addActionListener(e -> {
-            this.remove(area);
-            this.remove(days);
-            this.remove(months);
-            this.remove(years);
-            this.remove(confirmar);
-            this.remove(eliminar);
-            this.remove(guardar);
+            this.removeAll();
             this.add(label);
             this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
             label.setText(area.getText());
@@ -117,6 +115,7 @@ public class PendientePanel extends JPanel implements MouseListener, ItemListene
     @Override
     public void mouseClicked(MouseEvent e) {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT + 150));
+        flowLayout.setVgap(10);
         this.remove(label);
         this.add(area);
         this.add(days);
