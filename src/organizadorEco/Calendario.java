@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDate;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 
 public class Calendario extends JPanel implements ActionListener {
@@ -26,6 +27,7 @@ public class Calendario extends JPanel implements ActionListener {
     JLabel fecha;
     JPanel escritura;
     JTextField campo;
+    Border borde;
 
     int y, m, d;
 
@@ -90,19 +92,22 @@ public class Calendario extends JPanel implements ActionListener {
         year.setBackground(GUI.colorTerciario);
         year.addActionListener(this);
 
+        borde = BorderFactory.createLineBorder(GUI.colorCuaternario, 3, true);
         dias = new JButton[31];
         for (int d = 0; d < 31; ++d) {
             dias[d] = new JButton(String.valueOf(d + 1));
             dias[d].setName(String.valueOf(d + 1));
             dias[d].setBorder(null);
-            dias[d].setBackground(GUI.colorTerciario);
+            dias[d].setBackground(GUI.colorSecundario);
             dias[d].setPreferredSize(new Dimension(40, 40));
             dias[d].setFont(new Font(GUI.fuente, Font.PLAIN, 12));
             dias[d].addActionListener(this);
         }
 
         hoy = LocalDate.now();
-        LocalDate primerDia = LocalDate.of(hoy.getYear(), hoy.getMonth(), 1);
+        y = hoy.getYear();
+        m = hoy.getMonthValue();
+        LocalDate primerDia = LocalDate.of(y, m, 1);
         int diaSemana = primerDia.getDayOfWeek().getValue();
         int duracion = hoy.getMonth().length(hoy.isLeapYear());
 
@@ -142,33 +147,25 @@ public class Calendario extends JPanel implements ActionListener {
             }
             this.add(addOne);
             this.add(regresar);
-            revalidate();
-            repaint();
         }
+        else {
+            actualizarBordes();
+        }
+        revalidate();
+        repaint();
     }
 
-    /* public void actualizarPaneles() {
-        if (!mesVista) {
-            this.removeAll();
-            LocalDate localDate = LocalDate.now();
-            fecha.setText(localDate.toString());
-            this.add(fecha);
-            for (Pendiente pend : Organizador.pendientes) {
-                if (pend.getFecha().equals(localDate)) {
-                    String desc = pend.getDescripcion();
-                    int year = hoy.getYear();
-                    int month = hoy.getMonthValue();
-                    int day = hoy.getDayOfMonth();
-                    PendientePanel pendPan = new PendientePanel(desc, year, month, day);
-                    this.add(pendPan);
-                }
-            }
-            this.add(addOne);
-            this.add(regresar);
-            revalidate();
-            repaint();
+    private void actualizarBordes() {
+        for (JButton dia : dias) {
+            dia.setBorder(null);
         }
-    } */
+
+        for (Pendiente pend : Organizador.pendientes) {
+            if (pend.getYear() == y && pend.getMonth() == m) {
+                dias[pend.getDay() - 1].setBorder(borde);
+            }
+        }
+    }
 
     private void makeCalendar(int duracion, int diaSemana) {
         panelMes.removeAll();
@@ -187,6 +184,7 @@ public class Calendario extends JPanel implements ActionListener {
         for (int d = 0; d < duracion; ++d) {
             panelMes.add(dias[d]);
         }
+        actualizarBordes();
         revalidate();
         repaint();
     }
@@ -196,6 +194,7 @@ public class Calendario extends JPanel implements ActionListener {
         this.removeAll();
         this.add(comboContainer);
         this.add(panelMes);
+        actualizarBordes();
         revalidate();
         repaint();
     }
@@ -209,6 +208,9 @@ public class Calendario extends JPanel implements ActionListener {
             LocalDate primerDia = LocalDate.of(y, m, 1);
             int diaSemana = primerDia.getDayOfWeek().getValue();
             int duracion = primerDia.getMonth().length(primerDia.isLeapYear());
+            for (JButton dia : dias) {
+                dia.setBorder(null);
+            }
             makeCalendar(duracion, diaSemana);
         }
 
