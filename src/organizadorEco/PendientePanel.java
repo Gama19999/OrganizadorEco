@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class PendientePanel extends JPanel implements MouseListener, ItemListener {
-    final int WIDTH = 300;
-    final int HEIGHT = 40;
-    final int SIZE = 15;
+    static final int WIDTH = 300;
+    static final int HEIGHT = 40;
+    static final int SIZE = 15;
     int day, month, year;
     FlowLayout flowLayout;
     JLabel label;
@@ -66,7 +66,7 @@ public class PendientePanel extends JPanel implements MouseListener, ItemListene
         area.setText(descripcion);
         area.setWrapStyleWord(true);
         area.setLineWrap(true);
-        area.setPreferredSize(new Dimension(WIDTH, 95));
+        area.setPreferredSize(new Dimension(WIDTH, 98));
 
         eliminar = new JButton();
         ImageIcon remove = new ImageIcon("imagenes/remove.png");
@@ -115,7 +115,7 @@ public class PendientePanel extends JPanel implements MouseListener, ItemListene
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        this.setPreferredSize(new Dimension(WIDTH, HEIGHT + 150));
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT + 155));
         flowLayout.setVgap(10);
         this.remove(label);
         this.add(area);

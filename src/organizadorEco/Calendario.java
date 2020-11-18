@@ -32,7 +32,7 @@ public class Calendario extends JPanel implements ActionListener {
     int y, m, d;
 
     Calendario() {
-        this.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, TaskPanel.HGAP, TaskPanel.VGAP));
         this.setBackground(GUI.colorPrincipal);
         // this.setPreferredSize(new Dimension(300, 300));
 
@@ -75,6 +75,7 @@ public class Calendario extends JPanel implements ActionListener {
         for (int i = 0; i < 7; i++) {
             labelDias[i] = new JLabel(days[i], JLabel.CENTER);
             labelDias[i].setFont(new Font(GUI.fuente, Font.PLAIN, 12));
+            labelDias[i].setForeground(Color.white);
             labelDias[i].setPreferredSize(new Dimension(35, 20));
         }
 
@@ -93,13 +94,13 @@ public class Calendario extends JPanel implements ActionListener {
         year.setBackground(GUI.colorTerciario);
         year.addActionListener(this);
 
-        borde = BorderFactory.createLineBorder(GUI.colorCuaternario, 3, true);
+        borde = BorderFactory.createLineBorder(GUI.colorCuaternario, 3);
         dias = new JButton[31];
         for (int d = 0; d < 31; ++d) {
             dias[d] = new JButton(String.valueOf(d + 1));
             dias[d].setName(String.valueOf(d + 1));
             dias[d].setBorder(null);
-            dias[d].setBackground(GUI.colorSecundario);
+            dias[d].setBackground(GUI.colorTerciario);
             dias[d].setPreferredSize(new Dimension(40, 40));
             dias[d].setFont(new Font(GUI.fuente, Font.PLAIN, 12));
             dias[d].addActionListener(this);
@@ -150,20 +151,22 @@ public class Calendario extends JPanel implements ActionListener {
             this.add(regresar);
         }
         else {
-            actualizarBordes();
+            actualizarBotones();
         }
         revalidate();
         repaint();
     }
 
-    private void actualizarBordes() {
+    private void actualizarBotones() {
         for (JButton dia : dias) {
-            dia.setBorder(null);
+            dia.setBackground(GUI.colorTerciario);
+            // dia.setBorder(null);
         }
 
         for (Pendiente pend : Organizador.pendientes) {
             if (pend.getYear() == y && pend.getMonth() == m) {
-                dias[pend.getDay() - 1].setBorder(borde);
+                dias[pend.getDay() - 1].setBackground(GUI.colorCuaternario);
+                // dias[pend.getDay() - 1].setBorder(borde);
             }
         }
     }
@@ -185,7 +188,7 @@ public class Calendario extends JPanel implements ActionListener {
         for (int d = 0; d < duracion; ++d) {
             panelMes.add(dias[d]);
         }
-        actualizarBordes();
+        actualizarBotones();
         revalidate();
         repaint();
     }
@@ -195,7 +198,7 @@ public class Calendario extends JPanel implements ActionListener {
         this.removeAll();
         this.add(comboContainer);
         this.add(panelMes);
-        actualizarBordes();
+        actualizarBotones();
         revalidate();
         repaint();
     }

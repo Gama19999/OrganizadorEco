@@ -12,14 +12,14 @@ public class DonePanel extends JPanel {
     DonePanel() {
         this.setBackground(new Color(0x27AE6A));
         this.setOpaque(false);
-        this.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, TaskPanel.HGAP, TaskPanel.VGAP));
         puntaje = new JLabel(Integer.toString(Organizador.realizados.size()));
         puntaje.setFont(new Font(GUI.fuente, Font.BOLD, 20));
         puntaje.setForeground(Color.white);
         actualizarPaneles();
     }
 
-    private void actualizarPaneles() {
+    public void actualizarPaneles() {
         this.removeAll();
         for (Pendiente pend : Organizador.realizados) {
             PendienteDone hecho = new PendienteDone(pend.getDescripcion(), pend.getFechaStr());

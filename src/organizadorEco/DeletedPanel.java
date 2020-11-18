@@ -9,7 +9,7 @@ public class DeletedPanel extends JPanel {
     DeletedPanel() {
         this.setBackground(GUI.colorPrincipal);
         this.setOpaque(false);
-        this.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, TaskPanel.HGAP, TaskPanel.VGAP));
         for (int i = 0; i < Organizador.eliminados.size(); i++) {
             String desc = Organizador.eliminados.get(i).getDescripcion();
             String fecha = Organizador.eliminados.get(i).getFechaStr();
@@ -22,7 +22,7 @@ public class DeletedPanel extends JPanel {
         actualizarPaneles();
     }
 
-    private void actualizarPaneles() {
+    public void actualizarPaneles() {
         this.removeAll();
         for (Pendiente pend : Organizador.eliminados) {
             PendienteDeleted deleted = new PendienteDeleted(

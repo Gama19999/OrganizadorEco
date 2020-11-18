@@ -24,7 +24,7 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
     JTextField tituloActual;
     JComboBox<String> temasCombo;
     JButton reestablecer;
-    String[] temas = {"Naturaleza", "Acuario", "Oscuro"};
+    String[] temas = {"Naturaleza", "Acuario", "Noche"};
 
     ConfigPanel() {
         this.setBackground(GUI.colorPrincipal);
@@ -123,6 +123,10 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
         if (e.getSource() == reestablecer) {
             config.delete();
             Organizador.reestablecer();
+            GUI.task.actualizarPaneles();
+            GUI.done.actualizarPaneles();
+            GUI.deleted.actualizarPaneles();
+            GUI.calendar.actualizarPaneles();
         }
     }
 }

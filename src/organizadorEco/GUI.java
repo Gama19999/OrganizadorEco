@@ -172,13 +172,13 @@ public class GUI implements WindowListener, MouseListener {
                     colorPrincipal = new Color(0x27AE60);
                     colorSecundario = new Color(0x7FEE71);
                     colorTerciario = new Color(0xAFF478);
-                    colorCuaternario = new Color(0xFCF678);
+                    colorCuaternario = new Color(0xFFF26B);
                 }
                 case 1 -> {
                     colorPrincipal = new Color(0x3A4292);
                     colorSecundario = new Color(0x6068C2);
                     colorTerciario = new Color(0x7489DC);
-                    colorCuaternario = new Color(0xCA70FF);
+                    colorCuaternario = new Color(0xEF70FF);
                     pintarIconos();
                 }
                 case 2 -> {
@@ -212,9 +212,7 @@ public class GUI implements WindowListener, MouseListener {
             for (int x = 0; x < bufferedImage.getWidth(); x++) {
                 for (int y = 0; y < bufferedImage.getHeight(); y++) {
                     Color color = new Color(bufferedImage.getRGB(x, y));
-                    int alpha = color.getAlpha();
                     int green = color.getGreen();
-                    System.out.println(green);
                     if (green != 0) {
                         bufferedImage.setRGB(x, y, colorPrincipal.getRGB());
                     }
