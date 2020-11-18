@@ -52,7 +52,7 @@ public class DonePanel extends JPanel {
             flowLayout = new FlowLayout(FlowLayout.CENTER, 40, 0);
             this.setLayout(flowLayout);
             this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-            this.setBackground(new Color(0xAFF478));
+            this.setBackground(GUI.colorTerciario);
 
             label = new JLabel(descripcion, SwingConstants.CENTER);
             label.setFont(new Font(GUI.fuente, Font.PLAIN, SIZE));

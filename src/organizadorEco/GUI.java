@@ -6,6 +6,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class GUI implements WindowListener, MouseListener {
     JFrame frame;
@@ -19,8 +23,10 @@ public class GUI implements WindowListener, MouseListener {
     JButton config;
     JPanel principal;
 
+    String[] strings;
     static String fuente = "Montserrat";
     static String tituloStr = "Just do that.";
+    static int tema = 0;
 
     static Color colorPrincipal = new Color(0x27AE60);
     static Color colorSecundario = new Color(0x7FEE71);
@@ -34,8 +40,17 @@ public class GUI implements WindowListener, MouseListener {
     ConfigPanel settings;
     CardLayout pantallas;
 
+    static File conf = new File("config.txt");
+
+    public static ImageIcon[] imagenes;
+    public static ImageIcon checkboxImg = new ImageIcon("imagenes/checkbox.png");
+    public static ImageIcon calendarImg = new ImageIcon("imagenes/calendar.png");
+    public static ImageIcon homeImg = new ImageIcon("imagenes/home.png");
+    public static ImageIcon trashImg = new ImageIcon("imagenes/trash.png");
+    public static ImageIcon gearImg = new ImageIcon("imagenes/gear.png");
 
     public GUI() {
+        aplicarConfiguracion();
     	//Rectangulo de la aplicación
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,12 +59,12 @@ public class GUI implements WindowListener, MouseListener {
         frame.setLayout(new BorderLayout(0, 0));
         frame.setLocationRelativeTo(null);
         frame.addWindowListener(this);
-        frame.setIconImage(new ImageIcon("imagenes/checkbox.png").getImage());
+        frame.setIconImage(checkboxImg.getImage());
 
         //Panel Principal
         pantallas = new CardLayout();
         principal = new JPanel();
-        principal.setBackground(colorPrincipal);;
+        principal.setBackground(colorPrincipal);
         principal.setLayout(pantallas);
 
         // Haciendo las cartas
@@ -77,8 +92,10 @@ public class GUI implements WindowListener, MouseListener {
         titulo.setFont(new Font(fuente, Font.BOLD, 20));
         titulo.setVerticalAlignment(JLabel.CENTER);
         titulo.setHorizontalAlignment(JLabel.CENTER);
+        titulo.setVerticalTextPosition(JLabel.CENTER);
+        titulo.setVerticalAlignment(JLabel.CENTER);
         titulo.setForeground(Color.white);
-        header.add(titulo);
+        header.add(titulo, BorderLayout.CENTER);
 
         //Recuadro que contiene los botones en la parte de abajo
         footer = new JPanel();
@@ -87,39 +104,27 @@ public class GUI implements WindowListener, MouseListener {
         footer.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 15));
 
         //Creación de los "Botones"
-        hechos = new JButton(new ImageIcon("imagenes/checkbox.png"));
+        hechos = new JButton(checkboxImg);
         hechos.setBackground(null);
         hechos.setBorder(null);
         hechos.addActionListener(e -> pantallas.show(principal, "done"));
 
-        //Calendari0
-        calendario = new JButton();
-        calendario.setIcon(new ImageIcon("imagenes/calendar.png"));
-        calendario.setBackground(null);
-        calendario.setBorder(null);
-        calendario.addActionListener(e -> {});
-
-        home = new JButton();
-        home.setIcon(new ImageIcon("imagenes/home.png"));
-        home.setBackground(null);
-        home.setBorder(null);
-
-        calendario = new JButton(new ImageIcon("imagenes/calendar.png"));
+        calendario = new JButton(calendarImg);
         calendario.setBackground(null);
         calendario.setBorder(null);
         calendario.addActionListener(e -> pantallas.show(principal, "calendar"));
         
-        home = new JButton(new ImageIcon("imagenes/home.png"));
+        home = new JButton(homeImg);
         home.setBackground(null);
         home.setBorder(null);
         home.addActionListener(e -> pantallas.show(principal, "task"));
 
-        basura = new JButton(new ImageIcon("imagenes/trash.png"));
+        basura = new JButton(trashImg);
         basura.setBackground(null);
         basura.setBorder(null);
         basura.addActionListener(e -> pantallas.show(principal, "deleted"));
 
-        config = new JButton(new ImageIcon("imagenes/gear.png"));
+        config = new JButton(gearImg);
         config.setBackground(null);
         config.setBorder(null);
         config.addActionListener(e -> pantallas.show(principal, "settings"));
@@ -135,6 +140,97 @@ public class GUI implements WindowListener, MouseListener {
         frame.add(header, BorderLayout.NORTH);
         frame.add(footer, BorderLayout.SOUTH);
         frame.setVisible(true);
+    }
+
+    public void aplicarConfiguracion() {
+        strings = new String[3];
+        try {
+            if (conf.createNewFile()) {
+                fuente = "Montserrat";
+                tituloStr = "Just do that.";
+                tema = 0;
+                return;
+            }
+            FileReader lector = new FileReader(conf);
+            int data = lector.read();
+            for (int i = 0; i < strings.length; i++) {
+                String temp = "";
+                while (data != '\n' && data != '\r' && data != -1) {
+                    temp += (char) data;
+                    data = lector.read();
+                }
+                strings[i] = temp;
+                data = lector.read();
+            }
+            lector.close();
+            fuente = strings[0];
+            tituloStr = strings[1];
+            tema = Integer.parseInt(strings[2]);
+
+            switch (tema) {
+                default -> {
+                    colorPrincipal = new Color(0x27AE60);
+                    colorSecundario = new Color(0x7FEE71);
+                    colorTerciario = new Color(0xAFF478);
+                    colorCuaternario = new Color(0xFCF678);
+                }
+                case 1 -> {
+                    colorPrincipal = new Color(0x3A4292);
+                    colorSecundario = new Color(0x6068C2);
+                    colorTerciario = new Color(0x7489DC);
+                    colorCuaternario = new Color(0xCA70FF);
+                    pintarIconos();
+                }
+                case 2 -> {
+                    colorPrincipal = new Color(0x101010);
+                    colorSecundario = new Color(0x686868);
+                    colorTerciario = new Color(0x909090);
+                    colorCuaternario = new Color(0xDCDCDC);
+                    pintarIconos();
+                }
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            fuente = "Montserrat";
+            tituloStr = "Just do that.";
+            tema = 0;
+        }
+    }
+
+    private void pintarIconos() {
+        imagenes = new ImageIcon[]{checkboxImg, calendarImg, homeImg, trashImg, gearImg};
+        for (int i = 0; i < imagenes.length; i++) {
+            BufferedImage bufferedImage = new BufferedImage(
+                    imagenes[i].getIconWidth(),
+                    imagenes[i].getIconHeight(),
+                    BufferedImage.TYPE_INT_RGB
+            );
+            Graphics g = bufferedImage.createGraphics();
+            imagenes[i].paintIcon(null, g, 0, 0);
+            g.dispose();
+            for (int x = 0; x < bufferedImage.getWidth(); x++) {
+                for (int y = 0; y < bufferedImage.getHeight(); y++) {
+                    Color color = new Color(bufferedImage.getRGB(x, y));
+                    int alpha = color.getAlpha();
+                    int green = color.getGreen();
+                    System.out.println(green);
+                    if (green != 0) {
+                        bufferedImage.setRGB(x, y, colorPrincipal.getRGB());
+                    }
+                    else {
+                        bufferedImage.setRGB(x, y, colorSecundario.getRGB());
+                    }
+                }
+            }
+            imagenes[i] = new ImageIcon(bufferedImage);
+        }
+        checkboxImg = imagenes[0];
+        calendarImg = imagenes[1];
+        homeImg = imagenes[2];
+        trashImg = imagenes[3];
+        gearImg = imagenes[4];
+
     }
 
     @Override

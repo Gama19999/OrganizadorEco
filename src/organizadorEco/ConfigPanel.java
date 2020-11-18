@@ -14,7 +14,7 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
     final static File config = new File("config.txt");
     static String fuenteStr;
     static String tituloStr;
-    static String tema;
+    static int tema;
     JPanel custom;
     JPanel otros;
     JLabel cambiarFuente;
@@ -40,6 +40,10 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
         otros.setBackground(GUI.colorTerciario);
         otros.setPreferredSize(new Dimension(WIDTH - 20, HEIGHT - 202));
         otros.setLayout(new FlowLayout(FlowLayout.CENTER, 150, 10));
+
+        fuenteStr = GUI.fuente;
+        tituloStr = GUI.tituloStr;
+        tema = GUI.tema;
 
         cambiarFuente = new JLabel("Fuente");
         cambiarFuente.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
@@ -78,6 +82,7 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
         temasCombo.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
         temasCombo.setBackground(GUI.colorTerciario);
         temasCombo.addItemListener(this);
+        temasCombo.setSelectedIndex(tema);
 
         reestablecer = new JButton("Reestablecer");
         reestablecer.setBackground(GUI.colorTerciario);
@@ -96,40 +101,6 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
         this.add(otros);
     }
 
-    public static void aplicarConfiguracion() {
-        try {
-            if (config.createNewFile()) {
-                fuenteStr = GUI.fuente;
-                tituloStr = GUI.tituloStr;
-                tema = "Naturaleza";
-            }
-            else {
-                FileReader lector = new FileReader(config);
-                int data = lector.read();
-                // No haced esto en casa chicos
-                fuenteStr = "";
-                while (data != '\n' && data != '\r' && data != -1) {
-                    fuenteStr += (char) data;
-                    data = lector.read();
-                }
-                data = lector.read();
-                GUI.fuente = fuenteStr;
-
-                tituloStr = "";
-                while (data != '\n' && data != '\r' && data != -1) {
-                    tituloStr += (char) data;
-                    data = lector.read();
-                }
-                GUI.tituloStr = tituloStr;
-                tema = "Naturaleza";
-                lector.close();
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void guardarConfiguracion() {
         try {
             FileWriter escritor = new FileWriter(config);
@@ -143,7 +114,7 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getSource() == temasCombo) {
-            tema = (String)temasCombo.getSelectedItem();
+            tema = temasCombo.getSelectedIndex();
         }
     }
 
