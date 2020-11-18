@@ -38,21 +38,27 @@ public class DeletedPanel extends JPanel {
         final int WIDTH = 300;
         final int HEIGHT = 40;
         final int SIZE = 15;
+        boolean desplegado;
         JLabel label;
         JLabel date;
         JTextArea area;
         JButton recuperar;
         JButton descartar;
+        FlowLayout flowLayout;
 
         PendienteDeleted(String descripcion, String fecha) {
-            this.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 10));
+            flowLayout = new FlowLayout(FlowLayout.CENTER, 40, 0);
+            this.setLayout(flowLayout);
             this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
             this.setBackground(GUI.colorTerciario);
 
             label = new JLabel(descripcion, SwingConstants.CENTER);
             label.setFont(new Font(GUI.fuente, Font.PLAIN, SIZE));
-            label.setVerticalAlignment(SwingConstants.CENTER);
-            label.setPreferredSize(new Dimension(WIDTH - 15, HEIGHT / 2));
+            label.setVerticalAlignment(JLabel.CENTER);
+            label.setVerticalTextPosition(JLabel.CENTER);
+            label.setHorizontalAlignment(JLabel.CENTER);
+            label.setHorizontalTextPosition(JLabel.CENTER);
+            label.setPreferredSize(new Dimension(WIDTH - 5, HEIGHT));
 
             area = new JTextArea();
             area.setFont(new Font(GUI.fuente, Font.PLAIN, SIZE));
@@ -88,18 +94,29 @@ public class DeletedPanel extends JPanel {
                 actualizarPaneles();
             });
 
+            desplegado = false;
             this.add(label);
             this.addMouseListener(this);
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            this.setPreferredSize(new Dimension(WIDTH, HEIGHT + 118));
-            this.remove(label);
-            this.add(area);
-            this.add(date);
-            this.add(recuperar);
-            this.add(descartar);
+            if (desplegado) {
+                flowLayout.setVgap(0);
+                this.removeAll();
+                this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+                this.add(label);
+            }
+            else {
+                flowLayout.setVgap(10);
+                this.setPreferredSize(new Dimension(WIDTH, HEIGHT + 118));
+                this.remove(label);
+                this.add(area);
+                this.add(date);
+                this.add(recuperar);
+                this.add(descartar);
+            }
+            desplegado = !desplegado;
             revalidate();
             repaint();
         }

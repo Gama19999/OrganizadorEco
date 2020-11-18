@@ -56,6 +56,7 @@ public class PendientePanel extends JPanel implements MouseListener, ItemListene
         label = new JLabel(descripcion, SwingConstants.CENTER);
         label.setFont(new Font(GUI.fuente, Font.PLAIN, SIZE));
         label.setVerticalAlignment(JLabel.CENTER);
+        label.setVerticalTextPosition((JLabel.CENTER));
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setHorizontalTextPosition(JLabel.CENTER);
         label.setPreferredSize(new Dimension(WIDTH - 5, HEIGHT));

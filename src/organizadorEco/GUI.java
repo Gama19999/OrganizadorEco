@@ -2,10 +2,12 @@ package organizadorEco;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-public class GUI implements WindowListener {
+public class GUI implements WindowListener, MouseListener {
     JFrame frame;
     JPanel header;
     JLabel titulo;
@@ -30,6 +32,7 @@ public class GUI implements WindowListener {
     public static DeletedPanel deleted;
     public static Calendario calendar;
     ConfigPanel settings;
+    CardLayout pantallas;
 
 
     public GUI() {
@@ -44,9 +47,9 @@ public class GUI implements WindowListener {
         frame.setIconImage(new ImageIcon("imagenes/checkbox.png").getImage());
 
         //Panel Principal
+        pantallas = new CardLayout();
         principal = new JPanel();
-        principal.setBackground(colorPrincipal);
-        CardLayout pantallas = new CardLayout();
+        principal.setBackground(colorPrincipal);;
         principal.setLayout(pantallas);
 
         // Haciendo las cartas
@@ -67,6 +70,7 @@ public class GUI implements WindowListener {
         header.setBackground(colorSecundario);
         header.setPreferredSize(new Dimension(350, 60));
         header.setLayout(new BorderLayout(0, 0));
+        header.addMouseListener(this);
 
         //Texto del titulo
         titulo = new JLabel(tituloStr);
@@ -157,4 +161,23 @@ public class GUI implements WindowListener {
 
     @Override
     public void windowDeactivated(WindowEvent e) { }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (e.getSource() == header) {
+            pantallas.show(principal, "task");
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) { }
+
+    @Override
+    public void mouseReleased(MouseEvent e) { }
+
+    @Override
+    public void mouseEntered(MouseEvent e) { }
+
+    @Override
+    public void mouseExited(MouseEvent e) { }
 }

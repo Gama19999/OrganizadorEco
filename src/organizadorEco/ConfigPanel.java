@@ -38,7 +38,7 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
 
         otros = new JPanel();
         otros.setBackground(GUI.colorTerciario);
-        otros.setPreferredSize(new Dimension(WIDTH - 20, HEIGHT - 200));
+        otros.setPreferredSize(new Dimension(WIDTH - 20, HEIGHT - 202));
         otros.setLayout(new FlowLayout(FlowLayout.CENTER, 150, 10));
 
         cambiarFuente = new JLabel("Fuente");
