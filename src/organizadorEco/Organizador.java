@@ -66,8 +66,8 @@ public abstract class Organizador {
         pendientes.add(pendiente);
     }
 
-    public static void agregarPendiente(String desc, int year, int month, int day) {
-        Pendiente pend = new Pendiente(desc, year, month, day);
+    public static void agregarPendiente(String desc, LocalDate fecha) {
+        Pendiente pend = new Pendiente(desc, fecha);
         pendientes.add(pend);
     }
 

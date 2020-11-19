@@ -105,6 +105,7 @@ public class DonePanel extends JPanel implements ActionListener {
         if (paginas.size() > 1) {
             if (pantallaActual == 0) {
                 paginas.get(0).add(forward);
+                paginas.get(pantallaActual).add(puntaje);
             }
             else if (pantallaActual == paginas.size() - 1) {
                 paginas.get(pantallaActual).add(back);

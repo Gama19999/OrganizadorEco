@@ -10,7 +10,7 @@ public class TaskPanel extends JPanel implements ActionListener {
     static final int VGAP = 15;
     static final ImageIcon backImg = new ImageIcon("imagenes/back.png");
     static final ImageIcon forwardImg = new ImageIcon("imagenes/forward.png");
-    final ImageIcon plusImg = new ImageIcon("imagenes/plus.png");
+    static final ImageIcon plusImg = new ImageIcon("imagenes/plus.png");
     int pantallaActual;
     JButton addOne;
     JButton back;
@@ -50,7 +50,6 @@ public class TaskPanel extends JPanel implements ActionListener {
         pagLabel.setHorizontalAlignment(JLabel.CENTER);
         pagLabel.setVerticalAlignment(JLabel.CENTER);
 
-        pantallaActual = 0;
         actualizarPaneles();
     }
 
