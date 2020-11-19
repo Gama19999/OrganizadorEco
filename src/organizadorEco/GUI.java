@@ -21,6 +21,7 @@ public class GUI implements WindowListener, MouseListener {
     JButton home;
     JButton basura;
     JButton config;
+    JButton[] botones;
     JPanel principal;
 
     String[] strings;
@@ -48,9 +49,16 @@ public class GUI implements WindowListener, MouseListener {
     public static ImageIcon homeImg = new ImageIcon("imagenes/home.png");
     public static ImageIcon trashImg = new ImageIcon("imagenes/trash.png");
     public static ImageIcon gearImg = new ImageIcon("imagenes/gear.png");
+    ImageIcon checkboxWhite;
+    ImageIcon calendarWhite;
+    ImageIcon homeWhite;
+    ImageIcon trashWhite;
+    ImageIcon gearWhite;
 
     public GUI() {
+        imagenes = new ImageIcon[]{checkboxImg, calendarImg, homeImg, trashImg, gearImg};
         aplicarConfiguracion();
+        pintarBlanco();
     	//Rectangulo de la aplicación
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,6 +68,7 @@ public class GUI implements WindowListener, MouseListener {
         frame.setLocationRelativeTo(null);
         frame.addWindowListener(this);
         frame.setIconImage(checkboxImg.getImage());
+        frame.setResizable(false);
 
         //Panel Principal
         pantallas = new CardLayout();
@@ -107,31 +116,61 @@ public class GUI implements WindowListener, MouseListener {
         hechos = new JButton(checkboxImg);
         hechos.setBackground(null);
         hechos.setBorder(null);
-        hechos.addActionListener(e -> pantallas.show(principal, "done"));
+        hechos.addActionListener(e -> {
+            pantallas.show(principal, "done");
+            for (int i = 0; i < botones.length; i++) {
+                botones[i].setIcon(imagenes[i]);
+            }
+            hechos.setIcon(checkboxWhite);
+        });
 
         calendario = new JButton(calendarImg);
         calendario.setBackground(null);
         calendario.setBorder(null);
-        calendario.addActionListener(e -> pantallas.show(principal, "calendar"));
+        calendario.addActionListener(e -> {
+            pantallas.show(principal, "calendar");
+            for (int i = 0; i < botones.length; i++) {
+                botones[i].setIcon(imagenes[i]);
+            }
+            calendario.setIcon(calendarWhite);
+        });
         
-        home = new JButton(homeImg);
+        home = new JButton(homeWhite);
         home.setBackground(null);
         home.setBorder(null);
-        home.addActionListener(e -> pantallas.show(principal, "task"));
+        home.addActionListener(e -> {
+            pantallas.show(principal, "task");
+            for (int i = 0; i < botones.length; i++) {
+                botones[i].setIcon(imagenes[i]);
+            }
+            home.setIcon(homeWhite);
+        });
 
         basura = new JButton(trashImg);
         basura.setBackground(null);
         basura.setBorder(null);
-        basura.addActionListener(e -> pantallas.show(principal, "deleted"));
+        basura.addActionListener(e -> {
+            pantallas.show(principal, "deleted");
+            for (int i = 0; i < botones.length; i++) {
+                botones[i].setIcon(imagenes[i]);
+            }
+            basura.setIcon(trashWhite);
+        });
 
         config = new JButton(gearImg);
         config.setBackground(null);
         config.setBorder(null);
-        config.addActionListener(e -> pantallas.show(principal, "settings"));
+        config.addActionListener(e -> {
+            pantallas.show(principal, "settings");
+            for (int i = 0; i < botones.length; i++) {
+                botones[i].setIcon(imagenes[i]);
+            }
+            config.setIcon(gearWhite);
+        });
 
-        JButton[] imagenes = {hechos, calendario, home, basura, config};
+        botones = new JButton[]{hechos, calendario, home, basura, config};
         //Adicion de los botones al footer
-        for (JButton imagen : imagenes) {
+        for (JButton imagen : botones) {
            footer.add(imagen);
         }
 
@@ -199,7 +238,6 @@ public class GUI implements WindowListener, MouseListener {
     }
 
     private void pintarIconos() {
-        imagenes = new ImageIcon[]{checkboxImg, calendarImg, homeImg, trashImg, gearImg};
         for (int i = 0; i < imagenes.length; i++) {
             BufferedImage bufferedImage = new BufferedImage(
                     imagenes[i].getIconWidth(),
@@ -228,6 +266,38 @@ public class GUI implements WindowListener, MouseListener {
         homeImg = imagenes[2];
         trashImg = imagenes[3];
         gearImg = imagenes[4];
+    }
+
+    private void pintarBlanco() {
+        ImageIcon[] imagenesBlanco = {checkboxImg, calendarImg, homeImg, trashImg, gearImg};
+        for (int i = 0; i < imagenesBlanco.length; i++) {
+            BufferedImage bufferedImage = new BufferedImage(
+                    imagenesBlanco[i].getIconWidth(),
+                    imagenesBlanco[i].getIconHeight(),
+                    BufferedImage.TYPE_INT_RGB
+            );
+            Graphics g = bufferedImage.createGraphics();
+            imagenesBlanco[i].paintIcon(null, g, 0, 0);
+            g.dispose();
+            for (int x = 0; x < bufferedImage.getWidth(); x++) {
+                for (int y = 0; y < bufferedImage.getHeight(); y++) {
+                    Color color = new Color(bufferedImage.getRGB(x, y));
+                    int green = color.getGreen();
+                    if (green != 0) {
+                        bufferedImage.setRGB(x, y, Color.white.getRGB());
+                    }
+                    else {
+                        bufferedImage.setRGB(x, y, colorSecundario.getRGB());
+                    }
+                }
+            }
+            imagenesBlanco[i] = new ImageIcon(bufferedImage);
+        }
+        checkboxWhite = imagenesBlanco[0];
+        calendarWhite = imagenesBlanco[1];
+        homeWhite = imagenesBlanco[2];
+        trashWhite = imagenesBlanco[3];
+        gearWhite = imagenesBlanco[4];
     }
 
     @Override
