@@ -75,7 +75,7 @@ public class PendientePanel extends JPanel implements MouseListener, ItemListene
         eliminar.setBorder(null);
         eliminar.addActionListener(e -> {
             Organizador.modificarPendiente(descripcion, area.getText(), year, month, day);
-            GUI.deleted.borrar(area.getText());
+            GUI.deleted.agregarEliminados(area.getText());
             GUI.task.actualizarPaneles();
             GUI.calendar.actualizarPaneles();
         });
@@ -87,7 +87,7 @@ public class PendientePanel extends JPanel implements MouseListener, ItemListene
         confirmar.setBorder(null);
         confirmar.addActionListener(e -> {
             Organizador.modificarPendiente(descripcion, area.getText(), year, month, day);
-            GUI.done.agregar(area.getText());
+            GUI.done.agregarRealizados(area.getText());
             GUI.task.actualizarPaneles();
             GUI.calendar.actualizarPaneles();
         });

@@ -8,15 +8,16 @@ import java.util.ArrayList;
 public class TaskPanel extends JPanel implements ActionListener {
     static final int HGAP = 15;
     static final int VGAP = 15;
+    static final ImageIcon backImg = new ImageIcon("imagenes/back.png");
+    static final ImageIcon forwardImg = new ImageIcon("imagenes/forward.png");
     final ImageIcon plusImg = new ImageIcon("imagenes/plus.png");
-    final ImageIcon backImg = new ImageIcon("imagenes/back.png");
-    final ImageIcon forwardImg = new ImageIcon("imagenes/forward.png");
     int pantallaActual;
     JButton addOne;
     JButton back;
     JButton forward;
     JPanel escritura;
     JTextField campo;
+    JLabel pagLabel;
     CardLayout cardLayout;
     FlowLayout flowLayout;
     ArrayList<JPanel> paginas;
@@ -42,6 +43,13 @@ public class TaskPanel extends JPanel implements ActionListener {
         forward.setBorder(null);
         forward.addActionListener(this);
 
+        pagLabel = new JLabel("1/1");
+        pagLabel.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
+        pagLabel.setForeground(Color.white);
+        pagLabel.setPreferredSize(new Dimension(PendientePanel.WIDTH, 32));
+        pagLabel.setHorizontalAlignment(JLabel.CENTER);
+        pagLabel.setVerticalAlignment(JLabel.CENTER);
+
         pantallaActual = 0;
         actualizarPaneles();
     }
@@ -51,6 +59,7 @@ public class TaskPanel extends JPanel implements ActionListener {
         if (e.getSource() == addOne) {
             paginas.get(pantallaActual).remove(addOne);
             paginas.get(pantallaActual).remove(back);
+            paginas.get(pantallaActual).remove(pagLabel);
             escritura = new JPanel();
             escritura.setPreferredSize(new Dimension(PendientePanel.WIDTH, PendientePanel.HEIGHT));
             escritura.setBackground(GUI.colorTerciario);
@@ -68,10 +77,14 @@ public class TaskPanel extends JPanel implements ActionListener {
         }
         else {
             if (e.getSource() == back) {
-                pantallaActual--;
+                if (pantallaActual >= 0) {
+                    pantallaActual--;
+                }
             }
             if (e.getSource() == forward) {
-                pantallaActual++;
+                if (pantallaActual <= paginas.size()) {
+                    pantallaActual++;
+                }
             }
             colocarBotones();
             cardLayout.show(this, Integer.toString(pantallaActual));
@@ -102,7 +115,7 @@ public class TaskPanel extends JPanel implements ActionListener {
         }
 
         int numPagsDespues = paginas.size();
-        if (numPagsAntes > numPagsDespues) {
+        if (numPagsAntes > numPagsDespues && pantallaActual == numPagsDespues - 1) {
             pantallaActual--;
         }
 
@@ -146,5 +159,7 @@ public class TaskPanel extends JPanel implements ActionListener {
             paginas.get(pantallaActual).add(back);
             paginas.get(pantallaActual).add(forward);
         }
+        pagLabel.setText((pantallaActual + 1) + " / " + paginas.size());
+        paginas.get(pantallaActual).add(pagLabel);
     }
 }

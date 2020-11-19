@@ -2,34 +2,128 @@ package organizadorEco;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
-public class DeletedPanel extends JPanel {
+public class DeletedPanel extends JPanel implements ActionListener {
+    int pantallaActual;
+    FlowLayout flowLayout;
+    CardLayout cardLayout;
+    ArrayList<JPanel> paginas;
+    JButton back;
+    JButton forward;
+    JLabel pagLabel;
+
     DeletedPanel() {
+        flowLayout = new FlowLayout(FlowLayout.CENTER, TaskPanel.HGAP, TaskPanel.VGAP);
+        cardLayout = new CardLayout();
+        paginas = new ArrayList<>();
         this.setBackground(GUI.colorPrincipal);
-        this.setOpaque(false);
-        this.setLayout(new FlowLayout(FlowLayout.CENTER, TaskPanel.HGAP, TaskPanel.VGAP));
-        for (int i = 0; i < Organizador.eliminados.size(); i++) {
-            String desc = Organizador.eliminados.get(i).getDescripcion();
-            String fecha = Organizador.eliminados.get(i).getFechaStr();
-            this.add(new PendienteDeleted(desc, fecha));
-        }
+        this.setLayout(cardLayout);
+        back = new JButton(TaskPanel.backImg);
+        back.setBackground(null);
+        back.setBorder(null);
+        back.addActionListener(this);
+
+        forward = new JButton(TaskPanel.forwardImg);
+        forward.setBackground(null);
+        forward.setBorder(null);
+        forward.addActionListener(this);
+
+        pagLabel = new JLabel("1/1");
+        pagLabel.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
+        pagLabel.setForeground(Color.white);
+        pagLabel.setPreferredSize(new Dimension(PendientePanel.WIDTH, 32));
+        pagLabel.setHorizontalAlignment(JLabel.CENTER);
+        pagLabel.setVerticalAlignment(JLabel.CENTER);
+        actualizarPaneles();
     }
 
-    public void borrar(String desc) {
+    public void agregarEliminados(String desc) {
         Organizador.eliminarPendiente(desc);
         actualizarPaneles();
     }
 
     public void actualizarPaneles() {
+        int numPagsAntes = paginas.size();
         this.removeAll();
-        for (Pendiente pend : Organizador.eliminados) {
-            PendienteDeleted deleted = new PendienteDeleted(
-                    pend.getDescripcion(),
-                    pend.getFechaStr());
-            this.add(deleted);
+        paginas.clear();
+        int numeroEliminados = Organizador.eliminados.size();
+
+        if (numeroEliminados == 0) {
+            JPanel panel = new JPanel(flowLayout);
+            panel.setBackground(GUI.colorPrincipal);
+            paginas.add(panel);
+            this.add(panel, "0");
+            cardLayout.show(this, "0");
+            return;
         }
+
+        for (int i = 0; i < numeroEliminados; i += 6) {
+            JPanel panel = new JPanel(flowLayout);
+            panel.setBackground(GUI.colorPrincipal);
+            paginas.add(panel);
+        }
+
+        int numPagsDespues = paginas.size();
+        if (numPagsAntes > numPagsDespues && pantallaActual == numPagsDespues - 1) {
+            pantallaActual--;
+        }
+
+        int indice = 0;
+        for (JPanel pagina : paginas) {
+            for (int j = 0; j < 6 && indice < numeroEliminados; j++) {
+                String texto = Organizador.eliminados.get(indice).getDescripcion();
+                String fecha = Organizador.eliminados.get(indice).getFechaStr();
+                PendienteDeleted pend = new PendienteDeleted(texto, fecha);
+                pagina.add(pend);
+                indice++;
+            }
+        }
+
+        for (int i = 0; i < paginas.size(); i++) {
+            this.add(paginas.get(i), Integer.toString(i));
+        }
+        cardLayout.show(this, Integer.toString(pantallaActual));
+        colocarBotones();
+        revalidate();
+        repaint();
+    }
+
+    private void colocarBotones() {
+        if (paginas.size() > 1) {
+            if (pantallaActual == 0) {
+                paginas.get(0).add(forward);
+            }
+            else if (pantallaActual == paginas.size() - 1) {
+                paginas.get(pantallaActual).add(back);
+            }
+            else {
+                paginas.get(pantallaActual).add(back);
+                paginas.get(pantallaActual).add(forward);
+            }
+        }
+        pagLabel.setText((pantallaActual + 1) + " / " + paginas.size());
+        paginas.get(pantallaActual).add(pagLabel);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == back) {
+            if (pantallaActual >= 0) {
+                pantallaActual--;
+            }
+        }
+        else {
+            if (pantallaActual <= paginas.size()) {
+                pantallaActual++;
+            }
+        }
+        colocarBotones();
+        cardLayout.show(this, Integer.toString(pantallaActual));
         revalidate();
         repaint();
     }
@@ -47,7 +141,7 @@ public class DeletedPanel extends JPanel {
         FlowLayout flowLayout;
 
         PendienteDeleted(String descripcion, String fecha) {
-            flowLayout = new FlowLayout(FlowLayout.CENTER, 40, 0);
+            flowLayout = new FlowLayout(FlowLayout.CENTER, 30, 0);
             this.setLayout(flowLayout);
             this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
             this.setBackground(GUI.colorTerciario);
@@ -67,7 +161,7 @@ public class DeletedPanel extends JPanel {
             area.setLineWrap(true);
             area.setEditable(false);
             area.setBackground(GUI.colorTerciario);
-            area.setPreferredSize(new Dimension(280, 95));
+            area.setPreferredSize(new Dimension(WIDTH - 20, 80));
 
             date = new JLabel(fecha);
             date.setFont(new Font(GUI.fuente, Font.PLAIN, SIZE));
@@ -108,8 +202,8 @@ public class DeletedPanel extends JPanel {
                 this.add(label);
             }
             else {
-                flowLayout.setVgap(10);
-                this.setPreferredSize(new Dimension(WIDTH, HEIGHT + 118));
+                flowLayout.setVgap(7);
+                this.setPreferredSize(new Dimension(WIDTH, HEIGHT + 95));
                 this.remove(label);
                 this.add(area);
                 this.add(date);

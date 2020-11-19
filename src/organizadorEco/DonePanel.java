@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.concurrent.Flow;
 
 public class DonePanel extends JPanel {
     JLabel puntaje;
@@ -32,7 +31,7 @@ public class DonePanel extends JPanel {
         repaint();
     }
 
-    public void agregar(String desc) {
+    public void agregarRealizados(String desc) {
         Organizador.marcarCompletado(desc);
         actualizarPaneles();
     }
