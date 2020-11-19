@@ -2,38 +2,144 @@ package organizadorEco;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
-public class DonePanel extends JPanel {
+public class DonePanel extends JPanel implements ActionListener {
+    final ImageIcon medalImg = new ImageIcon("imagenes/medal.png");
+    int pantallaActual;
+    FlowLayout flowLayout;
+    CardLayout cardLayout;
+    ArrayList<JPanel> paginas;
+    JButton back;
+    JButton forward;
+    JLabel pagLabel;
     JLabel puntaje;
 
     DonePanel() {
-        this.setBackground(new Color(0x27AE6A));
-        this.setOpaque(false);
-        this.setLayout(new FlowLayout(FlowLayout.CENTER, TaskPanel.HGAP, TaskPanel.VGAP));
+        flowLayout = new FlowLayout(FlowLayout.CENTER, TaskPanel.HGAP, TaskPanel.VGAP);
+        cardLayout = new CardLayout();
+        paginas = new ArrayList<>();
+        this.setBackground(GUI.colorPrincipal);
+        this.setLayout(cardLayout);
         puntaje = new JLabel(Integer.toString(Organizador.realizados.size()));
+        puntaje.setPreferredSize(new Dimension(PendientePanel.WIDTH, 32));
+        puntaje.setHorizontalAlignment(JLabel.CENTER);
+        puntaje.setVerticalAlignment(JLabel.CENTER);
         puntaje.setFont(new Font(GUI.fuente, Font.BOLD, 20));
         puntaje.setForeground(Color.white);
+
+        back = new JButton(TaskPanel.backImg);
+        back.setBackground(null);
+        back.setBorder(null);
+        back.addActionListener(this);
+
+        forward = new JButton(TaskPanel.forwardImg);
+        forward.setBackground(null);
+        forward.setBorder(null);
+        forward.addActionListener(this);
+
+        pagLabel = new JLabel("1/1");
+        pagLabel.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
+        pagLabel.setForeground(Color.white);
+        pagLabel.setPreferredSize(new Dimension(PendientePanel.WIDTH, 32));
+        pagLabel.setHorizontalAlignment(JLabel.CENTER);
+        pagLabel.setVerticalAlignment(JLabel.CENTER);
         actualizarPaneles();
     }
 
     public void actualizarPaneles() {
+        int numPagsAntes = paginas.size();
         this.removeAll();
-        for (Pendiente pend : Organizador.realizados) {
-            PendienteDone hecho = new PendienteDone(pend.getDescripcion(), pend.getFechaStr());
-            this.add(hecho);
-            this.add(new JLabel(new ImageIcon("imagenes/medal.png")));
+        paginas.clear();
+        int numeroRealizados = Organizador.realizados.size();
+
+        if (numeroRealizados == 0) {
+            JPanel panel = new JPanel(flowLayout);
+            panel.setBackground(GUI.colorPrincipal);
+            paginas.add(panel);
+            this.add(panel, "0");
+            cardLayout.show(this, "0");
+            revalidate();
+            repaint();
+            return;
         }
+
+        for (int i = 0; i < numeroRealizados; i += 6) {
+            JPanel panel = new JPanel(flowLayout);
+            panel.setBackground(GUI.colorPrincipal);
+            paginas.add(panel);
+        }
+
+        int numPagsDespues = paginas.size();
+        if (numPagsAntes > numPagsDespues && pantallaActual == numPagsAntes - 1 && pantallaActual > 0) {
+            pantallaActual--;
+        }
+
+        int indice = 0;
+        for (JPanel pagina : paginas) {
+            for (int j = 0; j < 6 && indice < numeroRealizados; j++) {
+                String texto = Organizador.realizados.get(indice).getDescripcion();
+                String fecha = Organizador.realizados.get(indice).getFechaStr();
+                PendienteDone pend = new PendienteDone(texto, fecha);
+                pagina.add(pend);
+                pagina.add(new JLabel(medalImg));
+                indice++;
+            }
+        }
+
+        for (int i = 0; i < paginas.size(); i++) {
+            this.add(paginas.get(i), Integer.toString(i));
+        }
+        cardLayout.show(this, Integer.toString(pantallaActual));
         puntaje.setText(Integer.toString(Organizador.realizados.size()));
-        this.add(puntaje);
+        colocarBotones();
         revalidate();
         repaint();
+    }
+
+    private void colocarBotones() {
+        if (paginas.size() > 1) {
+            if (pantallaActual == 0) {
+                paginas.get(0).add(forward);
+            }
+            else if (pantallaActual == paginas.size() - 1) {
+                paginas.get(pantallaActual).add(back);
+                paginas.get(pantallaActual).add(puntaje);
+            }
+            else {
+                paginas.get(pantallaActual).add(back);
+                paginas.get(pantallaActual).add(forward);
+            }
+        }
+        pagLabel.setText((pantallaActual + 1) + " / " + paginas.size());
+        paginas.get(pantallaActual).add(pagLabel);
     }
 
     public void agregarRealizados(String desc) {
         Organizador.marcarCompletado(desc);
         actualizarPaneles();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == back) {
+            if (pantallaActual >= 0) {
+                pantallaActual--;
+            }
+        }
+        else if (e.getSource() == forward) {
+            if (pantallaActual <= paginas.size()) {
+                pantallaActual++;
+            }
+        }
+        colocarBotones();
+        cardLayout.show(this, Integer.toString(pantallaActual));
+        revalidate();
+        repaint();
     }
 
     private class PendienteDone extends JPanel implements MouseListener {
@@ -48,7 +154,7 @@ public class DonePanel extends JPanel {
         FlowLayout flowLayout;
 
         PendienteDone(String descripcion, String fecha) {
-            flowLayout = new FlowLayout(FlowLayout.CENTER, 40, 0);
+            flowLayout = new FlowLayout(FlowLayout.CENTER, 30, 0);
             this.setLayout(flowLayout);
             this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
             this.setBackground(GUI.colorTerciario);
@@ -59,7 +165,7 @@ public class DonePanel extends JPanel {
             label.setHorizontalAlignment(JLabel.CENTER);
             label.setVerticalTextPosition(JLabel.CENTER);
             label.setVerticalAlignment(JLabel.CENTER);
-            label.setPreferredSize(new Dimension(WIDTH - 5, HEIGHT));
+            label.setPreferredSize(new Dimension(WIDTH - 10, HEIGHT));
 
             area = new JTextArea();
             area.setFont(new Font(GUI.fuente, Font.PLAIN, SIZE));
@@ -68,7 +174,7 @@ public class DonePanel extends JPanel {
             area.setLineWrap(true);
             area.setEditable(false);
             area.setBackground(GUI.colorTerciario);
-            area.setPreferredSize(new Dimension(WIDTH - 20, 95));
+            area.setPreferredSize(new Dimension(WIDTH - 20, 80));
             // area.setBorder(BorderFactory.createLineBorder(Color.black));
 
             date = new JLabel(fecha);
@@ -102,8 +208,8 @@ public class DonePanel extends JPanel {
                 this.add(label);
             }
             else {
-                flowLayout.setVgap(10);
-                this.setPreferredSize(new Dimension(WIDTH, HEIGHT + 118));
+                flowLayout.setVgap(7);
+                this.setPreferredSize(new Dimension(WIDTH, HEIGHT + 95));
                 this.remove(label);
                 this.add(area);
                 this.add(date);

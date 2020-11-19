@@ -115,8 +115,8 @@ public class PendientePanel extends JPanel implements MouseListener, ItemListene
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        this.setPreferredSize(new Dimension(WIDTH, HEIGHT + 155));
-        flowLayout.setVgap(10);
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT + 150));
+        flowLayout.setVgap(8);
         this.remove(label);
         this.add(area);
         this.add(days);

@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class DeletedPanel extends JPanel implements ActionListener {
+    final ImageIcon closeImg = new ImageIcon("imagenes/close.png");
     int pantallaActual;
     FlowLayout flowLayout;
     CardLayout cardLayout;
@@ -59,6 +60,8 @@ public class DeletedPanel extends JPanel implements ActionListener {
             paginas.add(panel);
             this.add(panel, "0");
             cardLayout.show(this, "0");
+            revalidate();
+            repaint();
             return;
         }
 
@@ -69,7 +72,7 @@ public class DeletedPanel extends JPanel implements ActionListener {
         }
 
         int numPagsDespues = paginas.size();
-        if (numPagsAntes > numPagsDespues && pantallaActual == numPagsDespues - 1) {
+        if (numPagsAntes > numPagsDespues && pantallaActual == numPagsAntes - 1 && pantallaActual > 0) {
             pantallaActual--;
         }
 
@@ -80,6 +83,14 @@ public class DeletedPanel extends JPanel implements ActionListener {
                 String fecha = Organizador.eliminados.get(indice).getFechaStr();
                 PendienteDeleted pend = new PendienteDeleted(texto, fecha);
                 pagina.add(pend);
+                JButton descartar = new JButton(closeImg);
+                descartar.setBackground(null);
+                descartar.setBorder(null);
+                descartar.addActionListener(e -> {
+                    Organizador.eliminarPermanente(texto);
+                    actualizarPaneles();
+                });
+                pagina.add(descartar);
                 indice++;
             }
         }
@@ -117,7 +128,7 @@ public class DeletedPanel extends JPanel implements ActionListener {
                 pantallaActual--;
             }
         }
-        else {
+        else if (e.getSource() == forward) {
             if (pantallaActual <= paginas.size()) {
                 pantallaActual++;
             }
@@ -129,7 +140,7 @@ public class DeletedPanel extends JPanel implements ActionListener {
     }
 
     private class PendienteDeleted extends JPanel implements MouseListener {
-        final int WIDTH = 300;
+        final int WIDTH = 250;
         final int HEIGHT = 40;
         final int SIZE = 15;
         boolean desplegado;
@@ -137,7 +148,7 @@ public class DeletedPanel extends JPanel implements ActionListener {
         JLabel date;
         JTextArea area;
         JButton recuperar;
-        JButton descartar;
+        // JButton descartar;
         FlowLayout flowLayout;
 
         PendienteDeleted(String descripcion, String fecha) {
@@ -152,7 +163,7 @@ public class DeletedPanel extends JPanel implements ActionListener {
             label.setVerticalTextPosition(JLabel.CENTER);
             label.setHorizontalAlignment(JLabel.CENTER);
             label.setHorizontalTextPosition(JLabel.CENTER);
-            label.setPreferredSize(new Dimension(WIDTH - 5, HEIGHT));
+            label.setPreferredSize(new Dimension(WIDTH - 10, HEIGHT));
 
             area = new JTextArea();
             area.setFont(new Font(GUI.fuente, Font.PLAIN, SIZE));
@@ -180,14 +191,15 @@ public class DeletedPanel extends JPanel implements ActionListener {
                 GUI.task.actualizarPaneles();
             });
 
-            descartar = new JButton(new ImageIcon("imagenes/close.png"));
+            /*
+            descartar = new JButton();
             descartar.setBackground(null);
             descartar.setBorder(null);
             descartar.addActionListener(e -> {
                 Organizador.eliminarPermanente(area.getText());
                 actualizarPaneles();
             });
-
+            */
             desplegado = false;
             this.add(label);
             this.addMouseListener(this);
@@ -208,7 +220,7 @@ public class DeletedPanel extends JPanel implements ActionListener {
                 this.add(area);
                 this.add(date);
                 this.add(recuperar);
-                this.add(descartar);
+                // this.add(descartar);
             }
             desplegado = !desplegado;
             revalidate();

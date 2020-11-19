@@ -228,7 +228,6 @@ public class GUI implements WindowListener, MouseListener {
         homeImg = imagenes[2];
         trashImg = imagenes[3];
         gearImg = imagenes[4];
-
     }
 
     @Override

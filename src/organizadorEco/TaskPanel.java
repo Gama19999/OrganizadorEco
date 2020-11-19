@@ -105,6 +105,8 @@ public class TaskPanel extends JPanel implements ActionListener {
             paginas.add(panel);
             this.add(panel, "0");
             cardLayout.show(this, "0");
+            revalidate();
+            repaint();
             return;
         }
 
@@ -115,7 +117,7 @@ public class TaskPanel extends JPanel implements ActionListener {
         }
 
         int numPagsDespues = paginas.size();
-        if (numPagsAntes > numPagsDespues && pantallaActual == numPagsDespues - 1) {
+        if (numPagsAntes > numPagsDespues && pantallaActual == numPagsAntes - 1 && pantallaActual > 0) {
             pantallaActual--;
         }
 
