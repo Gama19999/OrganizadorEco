@@ -189,6 +189,7 @@ public class GUI implements WindowListener, MouseListener {
                 fuente = "Montserrat";
                 tituloStr = "Just do that.";
                 tema = 0;
+                pintarBlanco();
                 return;
             }
             FileReader lector = new FileReader(conf);
