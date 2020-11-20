@@ -20,10 +20,13 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
     JLabel cambiarFuente;
     JLabel cambiarTema;
     JLabel cambiarTitulo;
+    JLabel confirmar;
     JTextField fuenteActual;
     JTextField tituloActual;
     JComboBox<String> temasCombo;
     JButton reestablecer;
+    JButton si;
+    JButton no;
     String[] temas = {"Naturaleza", "Acuario", "Noche"};
 
     ConfigPanel() {
@@ -39,7 +42,7 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
         otros = new JPanel();
         otros.setBackground(GUI.colorTerciario);
         otros.setPreferredSize(new Dimension(WIDTH - 20, HEIGHT - 202));
-        otros.setLayout(new FlowLayout(FlowLayout.CENTER, 150, 10));
+        otros.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
 
         fuenteStr = GUI.fuente;
         tituloStr = GUI.tituloStr;
@@ -86,9 +89,26 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
 
         reestablecer = new JButton("Reestablecer");
         reestablecer.setBackground(GUI.colorTerciario);
-        reestablecer.setForeground(Color.black);
         reestablecer.addActionListener(this);
         reestablecer.setFont(new Font(GUI.fuente, Font.BOLD, 14));
+
+        confirmar = new JLabel("¿Eliminar todos los pendientes?");
+        confirmar.setFont(new Font(GUI.fuente, Font.PLAIN, 14));
+        confirmar.setVerticalAlignment(JLabel.CENTER);
+        confirmar.setHorizontalAlignment(JLabel.CENTER);
+
+        si = new JButton("Si");
+        si.setBackground(GUI.colorTerciario);
+        si.setFont(new Font(GUI.fuente, Font.BOLD, 14));
+        si.setForeground(Color.red);
+        si.addActionListener(this);
+
+        no = new JButton("No");
+        no.setBackground(GUI.colorTerciario);
+        no.addActionListener(this);
+        no.setFont(new Font(GUI.fuente, Font.BOLD, 14));
+        no.addActionListener(this);
+
 
         custom.add(cambiarFuente);
         custom.add(fuenteActual);
@@ -121,12 +141,28 @@ class ConfigPanel extends JPanel implements ItemListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == reestablecer) {
-            config.delete();
-            Organizador.reestablecer();
-            GUI.task.actualizarPaneles();
-            GUI.done.actualizarPaneles();
-            GUI.deleted.actualizarPaneles();
-            GUI.calendar.actualizarPaneles();
+            otros.setPreferredSize(new Dimension(WIDTH - 20, HEIGHT - 170));
+            otros.add(confirmar);
+            otros.add(si);
+            otros.add(no);
+            otros.remove(reestablecer);
         }
+        else {
+            if (e.getSource() == si) {
+                config.delete();
+                Organizador.reestablecer();
+                GUI.task.actualizarPaneles();
+                GUI.done.actualizarPaneles();
+                GUI.deleted.actualizarPaneles();
+                GUI.calendar.actualizarPaneles();
+            }
+            otros.remove(confirmar);
+            otros.remove(si);
+            otros.remove(no);
+            otros.add(reestablecer);
+            otros.setPreferredSize(new Dimension(WIDTH - 20, HEIGHT - 202));
+        }
+        revalidate();
+        repaint();
     }
 }

@@ -57,8 +57,9 @@ public class GUI implements WindowListener, MouseListener {
 
     public GUI() {
         imagenes = new ImageIcon[]{checkboxImg, calendarImg, homeImg, trashImg, gearImg};
+        // pintarBlanco();
         aplicarConfiguracion();
-        pintarBlanco();
+
     	//Rectangulo de la aplicación
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -212,12 +213,14 @@ public class GUI implements WindowListener, MouseListener {
                     colorSecundario = new Color(0x7FEE71);
                     colorTerciario = new Color(0xAFF478);
                     colorCuaternario = new Color(0xFFF26B);
+                    pintarBlanco();
                 }
                 case 1 -> {
                     colorPrincipal = new Color(0x3A4292);
                     colorSecundario = new Color(0x6068C2);
                     colorTerciario = new Color(0x7489DC);
                     colorCuaternario = new Color(0xEF70FF);
+                    pintarBlanco();
                     pintarIconos();
                 }
                 case 2 -> {
@@ -225,6 +228,7 @@ public class GUI implements WindowListener, MouseListener {
                     colorSecundario = new Color(0x686868);
                     colorTerciario = new Color(0x909090);
                     colorCuaternario = new Color(0xDCDCDC);
+                    pintarBlanco();
                     pintarIconos();
                 }
             }
@@ -235,37 +239,6 @@ public class GUI implements WindowListener, MouseListener {
             tituloStr = "Just do that.";
             tema = 0;
         }
-    }
-
-    private void pintarIconos() {
-        for (int i = 0; i < imagenes.length; i++) {
-            BufferedImage bufferedImage = new BufferedImage(
-                    imagenes[i].getIconWidth(),
-                    imagenes[i].getIconHeight(),
-                    BufferedImage.TYPE_INT_RGB
-            );
-            Graphics g = bufferedImage.createGraphics();
-            imagenes[i].paintIcon(null, g, 0, 0);
-            g.dispose();
-            for (int x = 0; x < bufferedImage.getWidth(); x++) {
-                for (int y = 0; y < bufferedImage.getHeight(); y++) {
-                    Color color = new Color(bufferedImage.getRGB(x, y));
-                    int green = color.getGreen();
-                    if (green != 0) {
-                        bufferedImage.setRGB(x, y, colorPrincipal.getRGB());
-                    }
-                    else {
-                        bufferedImage.setRGB(x, y, colorSecundario.getRGB());
-                    }
-                }
-            }
-            imagenes[i] = new ImageIcon(bufferedImage);
-        }
-        checkboxImg = imagenes[0];
-        calendarImg = imagenes[1];
-        homeImg = imagenes[2];
-        trashImg = imagenes[3];
-        gearImg = imagenes[4];
     }
 
     private void pintarBlanco() {
@@ -298,6 +271,37 @@ public class GUI implements WindowListener, MouseListener {
         homeWhite = imagenesBlanco[2];
         trashWhite = imagenesBlanco[3];
         gearWhite = imagenesBlanco[4];
+    }
+
+    private void pintarIconos() {
+        for (int i = 0; i < imagenes.length; i++) {
+            BufferedImage iconoTema = new BufferedImage(
+                    imagenes[i].getIconWidth(),
+                    imagenes[i].getIconHeight(),
+                    BufferedImage.TYPE_INT_RGB
+            );
+            Graphics g = iconoTema.createGraphics();
+            imagenes[i].paintIcon(null, g, 0, 0);
+            g.dispose();
+            for (int x = 0; x < iconoTema.getWidth(); x++) {
+                for (int y = 0; y < iconoTema.getHeight(); y++) {
+                    Color color = new Color(iconoTema.getRGB(x, y));
+                    int green = color.getGreen();
+                    if (green != 0) {
+                        iconoTema.setRGB(x, y, colorPrincipal.getRGB());
+                    }
+                    else {
+                        iconoTema.setRGB(x, y, colorSecundario.getRGB());
+                    }
+                }
+            }
+            imagenes[i] = new ImageIcon(iconoTema);
+        }
+        checkboxImg = imagenes[0];
+        calendarImg = imagenes[1];
+        homeImg = imagenes[2];
+        trashImg = imagenes[3];
+        gearImg = imagenes[4];
     }
 
     @Override

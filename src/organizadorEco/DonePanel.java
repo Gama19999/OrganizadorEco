@@ -56,10 +56,12 @@ public class DonePanel extends JPanel implements ActionListener {
         this.removeAll();
         paginas.clear();
         int numeroRealizados = Organizador.realizados.size();
+        puntaje.setText(Integer.toString(numeroRealizados));
 
         if (numeroRealizados == 0) {
             JPanel panel = new JPanel(flowLayout);
             panel.setBackground(GUI.colorPrincipal);
+            panel.add(puntaje);
             paginas.add(panel);
             this.add(panel, "0");
             cardLayout.show(this, "0");
@@ -95,7 +97,6 @@ public class DonePanel extends JPanel implements ActionListener {
             this.add(paginas.get(i), Integer.toString(i));
         }
         cardLayout.show(this, Integer.toString(pantallaActual));
-        puntaje.setText(Integer.toString(Organizador.realizados.size()));
         colocarBotones();
         revalidate();
         repaint();
@@ -105,7 +106,6 @@ public class DonePanel extends JPanel implements ActionListener {
         if (paginas.size() > 1) {
             if (pantallaActual == 0) {
                 paginas.get(0).add(forward);
-                paginas.get(pantallaActual).add(puntaje);
             }
             else if (pantallaActual == paginas.size() - 1) {
                 paginas.get(pantallaActual).add(back);
@@ -115,6 +115,9 @@ public class DonePanel extends JPanel implements ActionListener {
                 paginas.get(pantallaActual).add(back);
                 paginas.get(pantallaActual).add(forward);
             }
+        }
+        else {
+            paginas.get(pantallaActual).add(puntaje);
         }
         pagLabel.setText((pantallaActual + 1) + " / " + paginas.size());
         paginas.get(pantallaActual).add(pagLabel);
